@@ -1,6 +1,12 @@
 <html>
 <head>
     <title>Remote Software Development</title>
+<style>
+body
+{
+background-color:#F5F5F5;
+}
+</style>
 </head>
 <body>
     <h1>Remote Software Development</h1>
@@ -11,12 +17,12 @@
         </p>
     {% endif %}
 
-    <form action="" method="post">   	
+    <form action="" method="post">
         <table>
             {{ form.as_table }}
         </table>
         {% csrf_token %}
         <input type="submit" value="Submit">
-    </form>   
+    </form>
 </body>
 </html>

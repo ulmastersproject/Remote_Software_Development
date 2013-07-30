@@ -60,7 +60,7 @@ def Add_to_dropbox(request):
     global dropbox_sess
     global dropbox_request_token
 
-    #access_token = dropbox_sess.obtain_access_token(dropbox_request_token)
+    access_token = dropbox_sess.obtain_access_token(dropbox_request_token)
     dropbox_client = client.DropboxClient(dropbox_sess)
 
     #Delete if there is any previously created tar files
@@ -79,9 +79,9 @@ def Add_to_dropbox(request):
     command3 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/Code'
     os.system(command3)
 
-    #f = open('/home/ulmastersproject/Remote_Software_Development/App/Remote_Software.tar', 'rb')
+    f = open('/home/ulmastersproject/Remote_Software_Development/App/Remote_Software.tar', 'rb')
     #response = dropbox_client.put_file('/Remote_Software.tar', f, overwrite=True)
-    response = dropbox_client.put_file('/Remote_Software.tar', 'Hello World', overwrite=True)
+    response = dropbox_client.put_file('/Remote_Software.tar', f, overwrite=True)
     f.close()
 
     return HttpResponse("Your App is successfully uploaded into your DropBox location \n Response:- " + str(response))

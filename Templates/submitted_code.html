@@ -2,25 +2,30 @@
   <head>
     <title></title>
     <meta content="">
-    <style></style>
+    <style>
+    body
+    {
+    background-color:#F5F5F5;
+    }
+    </style>
   </head>
-  
+
   <body><h3></b>Submitted Python Code:-</h3>
-  	
+
   	{% if message %}
   	<tr><div class="highlight">
   		<td style="vertical-align: left" ; text-align: left>
   		<textarea id="textarea" name="code" cols="80" rows="15" wrap="on">
-  	
+
   	    {{ message }}
-		
+
 		</textarea>
 		</td>
 	</div></tr>
 	{% endif %}
-	
+
 	<br></br>
-	
+
 	<h3></b>Output Status:-</h3>
 	{% if output %}
 	<tr><div class="highlight">
@@ -30,13 +35,13 @@
   		</textarea></td>
 	</div></tr>
 	{% else %}
-	    
+
 	    <i>Some Errors in the Code !
-	
+
 	{% endif %}
-	 
+
 	<br></br>
-	
+
 	<h3></i>Code Errors:-</h3>
 	{% if errors %}
 	<tr><div class="highlight">
@@ -44,7 +49,7 @@
   		<textarea id="textarea" name="code" cols="80" rows="15" wrap="on">
   			{{ errors }}
   		</textarea></td>
-	</div></tr> 	
+	</div></tr>
 	{% endif %}
 	<a href = {{ dropbox_url }} target="_blank" > <button>Authenticate DropBox Account</button> </a>
 	<br></br>
