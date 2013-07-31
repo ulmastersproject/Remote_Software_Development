@@ -1,0 +1,20 @@
+<html>
+<head>
+    <title>Remote Software Development</title>
+    <style>
+    body
+    {
+    background-color:#F5F5F5;
+    }
+    </style>
+</head>
+<body>
+    <h1>Your App is successfully uploaded into DropBox</h1>
+    <h4>Response:-</h4>
+    {% if response %}
+        {% for iter in response %}
+            <p>{{ iter }}</p>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

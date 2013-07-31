@@ -60,8 +60,9 @@ def Add_to_dropbox(request):
     global dropbox_sess
     global dropbox_request_token
 
-    access_token = dropbox_sess.obtain_access_token(dropbox_request_token)
+    dropbox_sess.obtain_access_token(dropbox_request_token)
     dropbox_client = client.DropboxClient(dropbox_sess)
+    Account_info = dropbox_client.account_info()
 
     #Delete if there is any previously created tar files
     command0 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/Remote_Software.tar'
@@ -84,4 +85,20 @@ def Add_to_dropbox(request):
     response = dropbox_client.put_file('/Remote_Software.tar', f, overwrite=True)
     f.close()
 
-    return HttpResponse("Your App is successfully uploaded into your DropBox location \n Response:- " + str(response))
+    response_keys = response.keys()
+    response_values = response.values()
+    account_keys = Account_info.keys()
+    account_values = Account_info.values()
+
+    #Empty List to store the responses
+    response_list = []
+
+    #First add the account information into the empty list
+    for i in xrange(len(account_keys)):
+        response_list.append(str(account_keys[i]) + " : " + str(account_values[i]))
+
+    #Second add the response information into the empty list
+    for i in xrange(len(response_keys)):
+        response_list.append(str(response_keys[i]) + " : " + str(response_values[i]))
+
+    return render(request, 'Thank_You.html', {'response': response_list})
