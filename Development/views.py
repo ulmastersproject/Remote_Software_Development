@@ -9,6 +9,9 @@ from dropbox import client, rest, session
 import subprocess
 import os
 
+#Global variable from forms.py
+from forms import Global
+
 #DropBox Integration
 
 APP_KEY = 'jgrn1vwmfcp0lpf'
@@ -42,7 +45,7 @@ def Submitted_code(request):
     Code_Output = "App failed to Execute!"
     Execute = None
 
-    file_location = "/home/ulmastersproject/Remote_Software_Development/App/Code.py"
+    file_location = "/home/ulmastersproject/Remote_Software_Development/App/" + Global.app_name + ".py"
     file_object = open(file_location, "rb+")
     message = "".join(file_object.readlines())
     file_object.close()
@@ -65,25 +68,32 @@ def Add_to_dropbox(request):
     Account_info = dropbox_client.account_info()
 
     #Delete if there is any previously created tar files
-    command0 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/Remote_Software.tar'
+    command0 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/*.tar'
     os.system(command0)
 
     #Converting the given user code (.py) to an executable using pyinstaller library
-    command1 = 'python /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/pyinstaller.py -D /home/ulmastersproject/Remote_Software_Development/App/Code.py'
+    command1 = 'python /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/pyinstaller.py -D /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.py'
     os.system(command1)
 
     #The executable directory is compressed through tar
-    command2 = 'tar -cvf /home/ulmastersproject/Remote_Software_Development/App/Remote_Software.tar /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/Code/dist/Code'
+    command2 = 'tar -cvf /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.tar /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name + '/dist/' + Global.app_name
     os.system(command2)
 
     #The generated Code (folder) inside pyinstaller-2.0 is deleted after creating into Remote_Software.tar
-    command3 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/Code'
+    command3 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name
     os.system(command3)
 
-    f = open('/home/ulmastersproject/Remote_Software_Development/App/Remote_Software.tar', 'rb')
-    #response = dropbox_client.put_file('/Remote_Software.tar', f, overwrite=True)
-    response = dropbox_client.put_file('/Remote_Software.tar', f, overwrite=True)
+    f = open('/home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.py', 'rb')
+    response = dropbox_client.put_file('/' + Global.app_name + '.py', f, overwrite=True )
     f.close()
+
+    f = open('/home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.tar', 'rb')
+    response = dropbox_client.put_file('/' + Global.app_name + '.tar', f, overwrite=True)
+    f.close()
+
+    #Clean up commands
+    command4 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/*.py /home/ulmastersproject/Remote_Software_Development/App/*.tar'
+    os.system(command4)
 
     response_keys = response.keys()
     response_values = response.values()
