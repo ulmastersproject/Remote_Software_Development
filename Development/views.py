@@ -70,39 +70,44 @@ def Add_to_dropbox(request):
     dropbox_client = client.DropboxClient(dropbox_sess)
     Account_info = dropbox_client.account_info()
 
-    #Delete if there is any previously created tar files
-    command0 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/*.tar'
-    os.system(command0)
+    try:
 
-    #Change the current working directory at pyinstaller-2.0 for easy creation of the binary executables
-    os.chdir('/home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0')
+        #Delete if there is any previously created tar files
+        command0 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/*.tar'
+        os.system(command0)
 
-    #Converting the given user code (.py) to an executable using pyinstaller library
-    command1 = 'python /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/pyinstaller.py -D /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.py'
-    os.system(command1)
+        #Change the current working directory at pyinstaller-2.0 for easy creation of the binary executables
+        os.chdir('/home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0')
 
-    #Chage the current working directory at App folder location to create the tar file
-    os.chdir('/home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name + '/dist/')
+        #Converting the given user code (.py) to an executable using pyinstaller library
+        command1 = 'python /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/pyinstaller.py -D /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.py'
+        os.system(command1)
 
-    #The executable directory is compressed through tar
-    command2 = 'tar -cvf /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.tar ' + Global.app_name
-    os.system(command2)
+        #Chage the current working directory at App folder location to create the tar file
+        os.chdir('/home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name + '/dist/')
 
-    #The generated Code (folder) inside pyinstaller-2.0 is deleted after creating into App_Name.tar
-    command3 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name
-    os.system(command3)
+        #The executable directory is compressed through tar
+        command2 = 'tar -cvf /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.tar ' + Global.app_name
+        os.system(command2)
 
-    f = open('/home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.py', 'rb')
-    response = dropbox_client.put_file('/' + Global.app_name + '.py', f, overwrite=True )
-    f.close()
+        #The generated Code (folder) inside pyinstaller-2.0 is deleted after creating into App_Name.tar
+        command3 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name
+        os.system(command3)
 
-    f = open('/home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.tar', 'rb')
-    response = dropbox_client.put_file('/' + Global.app_name + '.tar', f, overwrite=True)
-    f.close()
+        f = open('/home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.py', 'rb')
+        response = dropbox_client.put_file('/' + Global.app_name + '.py', f, overwrite=True )
+        f.close()
 
-    #Clean up commands
-    command4 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/*.tar'
-    os.system(command4)
+        f = open('/home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.tar', 'rb')
+        response = dropbox_client.put_file('/' + Global.app_name + '.tar', f, overwrite=True)
+        f.close()
+
+        #Clean up commands
+        command4 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/*.tar'
+        os.system(command4)
+
+    except OSError:
+        return render(request, '404.html')
 
     #Converting the dictionary into Lists
     response_keys = response.keys()
