@@ -7,10 +7,11 @@ from django.http import HttpResponse
 from dropbox import client, rest, session
 
 import subprocess
+import time
 import os
 
 #Global variable from forms.py
-from forms import Global
+from Remote_Software_Development.Development.forms import Global
 
 #DropBox Integration
 
@@ -37,6 +38,7 @@ def Submitted_code(request):
     global dropbox_request_token
     global dropbox_url
 
+    time.sleep(10)
     dropbox_sess = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
     dropbox_request_token = dropbox_sess.obtain_request_token()
     # Make the user sign in and authorize this token
@@ -57,11 +59,12 @@ def Submitted_code(request):
     else:
         Code_Errors = "".join(Executed_results)
     return render(request, 'submitted_code.html', {'message': message, 'output':Code_Output,
-                'errors':Code_Errors, 'dropbox_url':dropbox_url})
+        'errors':Code_Errors, 'dropbox_url':dropbox_url})
 
 def Add_to_dropbox(request):
     global dropbox_sess
     global dropbox_request_token
+    time.sleep(5)
 
     dropbox_sess.obtain_access_token(dropbox_request_token)
     dropbox_client = client.DropboxClient(dropbox_sess)
@@ -71,15 +74,21 @@ def Add_to_dropbox(request):
     command0 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/*.tar'
     os.system(command0)
 
+    #Change the current working directory at pyinstaller-2.0 for easy creation of the binary executables
+    os.chdir('/home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0')
+
     #Converting the given user code (.py) to an executable using pyinstaller library
     command1 = 'python /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/pyinstaller.py -D /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.py'
     os.system(command1)
 
+    #Chage the current working directory at App folder location to create the tar file
+    os.chdir('/home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name + '/dist/')
+
     #The executable directory is compressed through tar
-    command2 = 'tar -cvf /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.tar /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name + '/dist/' + Global.app_name
+    command2 = 'tar -cvf /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.tar ' + Global.app_name
     os.system(command2)
 
-    #The generated Code (folder) inside pyinstaller-2.0 is deleted after creating into Remote_Software.tar
+    #The generated Code (folder) inside pyinstaller-2.0 is deleted after creating into App_Name.tar
     command3 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name
     os.system(command3)
 
@@ -92,9 +101,10 @@ def Add_to_dropbox(request):
     f.close()
 
     #Clean up commands
-    command4 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/*.py /home/ulmastersproject/Remote_Software_Development/App/*.tar'
+    command4 = 'rm -rf /home/ulmastersproject/Remote_Software_Development/App/*.tar'
     os.system(command4)
 
+    #Converting the dictionary into Lists
     response_keys = response.keys()
     response_values = response.values()
     account_keys = Account_info.keys()
@@ -110,5 +120,4 @@ def Add_to_dropbox(request):
     #Second add the response information into the empty list
     for i in xrange(len(response_keys)):
         response_list.append(str(response_keys[i]) + " : " + str(response_values[i]))
-
     return render(request, 'Thank_You.html', {'response': response_list})
