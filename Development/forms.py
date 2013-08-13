@@ -10,6 +10,7 @@ class DevelopmentForm(forms.Form):
     def clean_Python_Code(self):
         Global.app_name = self.cleaned_data['App_Name']
         message = self.cleaned_data['Python_Code']
+        message += "\n\nprint \" \""
         file_object = open("/home/ulmastersproject/Remote_Software_Development/App/" + Global.app_name + ".py", "wb+")
         file_object.write(message)
         file_object.close()

@@ -27,8 +27,10 @@ def Remote_Software_Development(request):
     if request.method == 'POST':
         form = DevelopmentForm(request.POST)
         if form.is_valid():
-            form.cleaned_data
+            #form.cleaned_data
             return HttpResponseRedirect('/Submitted_Code')
+        else:
+            return render(request, '404.html')
     else:
         form = DevelopmentForm()
     return render(request, 'Development_form.html', {'form': form})
@@ -43,13 +45,21 @@ def Submitted_code(request):
     dropbox_request_token = dropbox_sess.obtain_request_token()
     # Make the user sign in and authorize this token
     dropbox_url = dropbox_sess.build_authorize_url(dropbox_request_token)
-    Code_Errors = "App was successfully executed without any Errors!"
+    Code_Errors = ""
     Code_Output = "App failed to Execute!"
     Execute = None
 
     file_location = "/home/ulmastersproject/Remote_Software_Development/App/" + Global.app_name + ".py"
     file_object = open(file_location, "rb+")
-    message = "".join(file_object.readlines())
+    message = "".join(file_object.readlines()[:-1])
+    """
+    new_message = "".join(message.splitlines()[])
+    for iter in message.splitlines()[:-1]:
+        if iter == "\n":
+            new_message = new_message + "\n"
+        else:
+            new_message = new_message + iter
+    """
     file_object.close()
     Execute = subprocess.Popen(['python', file_location], stdout=subprocess.PIPE, stderr = subprocess.PIPE)
     Executed_results = Execute.communicate()
