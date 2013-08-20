@@ -1,3 +1,11 @@
+"""
+Project Title: Remote Software Development
+Author: Santhosh Kumar Balasa Ramnath
+Supervisor: Dr. John Nelson
+University: University of Limerick
+Year: 2012 - 2013
+"""
+
 from django.conf.urls.defaults import patterns, include, url
 from Remote_Software_Development.Development.views import *
 

@@ -1,4 +1,12 @@
 #!/usr/bin/env python
+"""
+Project Title: Remote Software Development
+Author: Santhosh Kumar Balasa Ramnath
+Supervisor: Dr. John Nelson
+University: University of Limerick
+Year: 2012 - 2013
+"""
+
 from django.core.management import execute_manager
 import imp
 try:
