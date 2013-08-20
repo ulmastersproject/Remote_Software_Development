@@ -1,4 +1,11 @@
 # Django settings for Remote_Software_Development project.
+"""
+Project Title: Remote Software Development
+Author: Santhosh Kumar Balasa Ramnath
+Supervisor: Dr. John Nelson
+University: University of Limerick
+Year: 2012 - 2013
+"""
 
 import os
 DIRNAME = os.path.abspath(os.path.dirname(__file__))

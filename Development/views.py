@@ -1,3 +1,11 @@
+"""
+Project Title: Remote Software Development
+Author: Santhosh Kumar Balasa Ramnath
+Supervisor: Dr. John Nelson
+University: University of Limerick
+Year: 2012 - 2013
+"""
+
 from django.shortcuts import render
 from Remote_Software_Development.Development.forms import DevelopmentForm
 from django.http import HttpResponseRedirect
@@ -51,15 +59,7 @@ def Submitted_code(request):
 
     file_location = "/home/ulmastersproject/Remote_Software_Development/App/" + Global.app_name + ".py"
     file_object = open(file_location, "rb+")
-    message = "".join(file_object.readlines()[:-1])
-    """
-    new_message = "".join(message.splitlines()[])
-    for iter in message.splitlines()[:-1]:
-        if iter == "\n":
-            new_message = new_message + "\n"
-        else:
-            new_message = new_message + iter
-    """
+    message = "".join(file_object.readlines()[:-1]) #Skip the last line which is redundant
     file_object.close()
     Execute = subprocess.Popen(['python', file_location], stdout=subprocess.PIPE, stderr = subprocess.PIPE)
     Executed_results = Execute.communicate()
