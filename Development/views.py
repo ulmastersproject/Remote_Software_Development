@@ -53,7 +53,7 @@ def Submitted_code(request):
     dropbox_request_token = dropbox_sess.obtain_request_token()
     # Make the user sign in and authorize this token
     dropbox_url = dropbox_sess.build_authorize_url(dropbox_request_token)
-    Code_Errors = ""
+    Code_Errors = " "
     Code_Output = "App failed to Execute!"
     Execute = None
 
@@ -92,6 +92,10 @@ def Add_to_dropbox(request):
         #Converting the given user code (.py) to an executable using pyinstaller library
         command1 = 'python /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/pyinstaller.py -D /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.py'
         os.system(command1)
+
+        #Copy the code to the locaion where tar file is created
+        command1_a = 'cp /home/ulmastersproject/Remote_Software_Development/App/' + Global.app_name + '.py /home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name + '/dist/' + Global.app_name
+        os.system(command1_a)
 
         #Chage the current working directory at App folder location to create the tar file
         os.chdir('/home/ulmastersproject/Remote_Software_Development/App/pyinstaller-2.0/' + Global.app_name + '/dist/')

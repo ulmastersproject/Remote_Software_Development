@@ -10,7 +10,7 @@ Year: 2012 - 2013
 import os
 DIRNAME = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
